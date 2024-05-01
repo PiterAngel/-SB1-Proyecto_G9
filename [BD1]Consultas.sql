@@ -38,7 +38,17 @@ group by departamento, pais ;
 /* 3. Desplegar el nombre del país, nombre del partido político y número de
 alcaldías de los partidos políticos que ganaron más alcaldías por país. */
 
-
+FROM (
+    SELECT r.Pais_Id, v.Partido_Id, COUNT(*) AS NumAlcaldias
+    FROM Votacion v
+    JOIN Municipio m ON v.Municipio_Id = m.Id
+    JOIN Departamento d ON m.Departamento_Id = d.Id
+    JOIN Region r ON d.Region_Id = r.Id
+    GROUP BY r.Pais_Id, v.Partido_Id
+) pt
+JOIN Pais p ON p.Id = pt.Pais_Id
+JOIN Partido partido ON pt.Partido_Id = partido.Id
+GROUP BY p.Nombre;
 
 /* 4. Desplegar todas las regiones por país en las que predomina la raza indígena.
 Es decir, hay más votos que las otras razas. */
